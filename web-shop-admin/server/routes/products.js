@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 import { z } from 'zod'
 import { db } from '../index.js'
-
+ // Define validation schemas
 const updateProductSchema = z.object({
   id: z.number().min(0),
   name: z.string().min(5),
