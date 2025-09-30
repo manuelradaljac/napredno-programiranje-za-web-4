@@ -2,6 +2,7 @@ import express from 'express'
 const router = express.Router()
 import { z } from 'zod'
 import { db } from '../index.js'
+import { getCategories } from '../services/db/products.js'
  // Define validation schemas
 const updateProductSchema = z.object({
   id: z.number().min(0),
@@ -47,7 +48,9 @@ router.get('/productDetails', async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' })
     }
+        await getCategories()
     return res.json(productWithPriceInNumber)
+
   } catch (error) {
     return res.status(404).json({ message: 'Product not found' })
   }

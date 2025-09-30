@@ -23,7 +23,6 @@ const Products = () => {
           <img className={styles.search_img} src="/images/search-icon.png" alt="" />
         </button>
       </div>
-      <Link to='/addProduct'>Add new product</Link>
       {isPending && <p>Loading...</p>}
       {error && <p>error</p>}
       <Link to='/addNewProduct'>Add new product</Link>
