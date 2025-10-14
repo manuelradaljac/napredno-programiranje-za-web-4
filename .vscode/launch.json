@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach by Process ID",
+            "name": "Attach to API",
             "processId": "${command:PickProcess}",
             "request": "attach",
             "skipFiles": [
@@ -13,6 +13,5 @@
             ],
             "type": "node"
         }
-
     ]
 }

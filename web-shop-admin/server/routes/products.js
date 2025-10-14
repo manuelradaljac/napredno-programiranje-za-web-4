@@ -2,10 +2,10 @@ import express from 'express'
 const router = express.Router()
 import { z } from 'zod'
 import { db } from '../index.js'
-import { getCategories } from '../services/db/products.js'
+import { addProduct, getCategories, getProductById, getProductsByName, updateProduct } from '../services/db/products.js'
 
 const updateProductSchema = z.object({
-  id: z.number().min(0),
+  id: z.number().min(1),
   name: z.string().min(5),
   price: z.number().min(0),
   stock: z.number().min(0),
@@ -19,17 +19,20 @@ const createProductSchema = updateProductSchema.extend({
   category_id: z.number().min(1)
 })
 
+function returnErrorResponse(res) {
+  // to add error logging
+  res.status(404).json('api error')
+}
+
 // Define user routes
 // Get all products
 router.get("/", async (req, res) => {
   const productName = req.query.product_name ?? ''
-  console.log('product name:', productName)
   try {
-    const [result, fields] = await db.query(`select * from products
-           where name like '%${productName}%';`)
+    const result = await getProductsByName(productName)
     res.json(result)
   } catch (error) {
-    res.status(404).json('error')
+    returnErrorResponse(res)
   }
 });
 
@@ -39,19 +42,20 @@ router.get('/productDetails', async (req, res) => {
     res.status(404).json({ message: 'Product not found' })
     return
   }
-  const getProductByIdQuery = `select * from products
-  where id = ?`
   try {
-    const [result, fields] = await db.execute(getProductByIdQuery, [productId])
-    const product = result[0]
-    const productWithPriceInNumber = { ...product, price: Number(product.price) }
-    if (!product) {
+    const product = await getProductById(productId)
+        if (!product) {
       return res.status(404).json({ message: 'Product not found' })
     }
-    await getCategories()
-    return res.json(productWithPriceInNumber)
+    const categories = await getCategories()
+    const productWithPriceInNumber = { ...product, price: Number(product.price) }
+    const productDetailsWithCategories = {
+      categories: categories,
+      product: productWithPriceInNumber
+    }
+    return res.json(productDetailsWithCategories)
   } catch (error) {
-    return res.status(404).json({ message: 'Product not found' })
+    return returnErrorResponse(res)
   }
 })
 
@@ -63,20 +67,9 @@ router.put('/', async (req, res) => {
       issues: validationResult.error.errors
     })
   }
-  const updatedProduct = validationResult.data
-  const updateProductQuery = `update products
-  set name = ?, price = ?, stock = ?, specs = ?, warranty = ?, description = ?
-  where id = ?`
+  const validProduct = validationResult.data
   try {
-    const [results, fields] = await db.execute(updateProductQuery, [
-      updatedProduct.name,
-      updatedProduct.price.toString(),
-      updatedProduct.stock.toString(),
-      updatedProduct.specs,
-      updatedProduct.warranty.toString(),
-      updatedProduct.description,
-      updatedProduct.id.toString()
-    ])
+    await updateProduct(validProduct)
     return res.status(204).json()
   } catch (error) {
     return res.status(500).json()
@@ -92,18 +85,15 @@ router.post('/', async (req, res) => {
       issues: validationResult.error.errors
     })
   }
-  const { name, description, category_id, price, stock, specs, warranty } = validationResult.data
-  const insertNewProductQuery = `insert into products (name, price, stock, category_id, specs, warranty, description)
-                                 values (?, ?, ?, ?, ?, ?, ?)`
+  const validProduct = validationResult.data
+
   try {
-    const [result, fields] = await db.execute(insertNewProductQuery, [name, price, stock, category_id, specs, warranty, description])
-    console.log('Add new product result', result)
-    console.log('Base url:', req.baseUrl)
-    const addedProductUrl = `http://localhost:3000/products/productDetails?id=${result.insertId}`
+    const insertResult = await addProduct(validProduct)
+    // console.log('Base url:', req.baseUrl)
+    const addedProductUrl = `http://localhost:3000/products/productDetails?id=${insertResult.insertId}`
     return res.json({ status: 'success', productUrl: addedProductUrl })
   } catch (error) {
     return res.status(403).json()
   }
 })
-
 export default router
