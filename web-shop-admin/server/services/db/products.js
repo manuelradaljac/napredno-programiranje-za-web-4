@@ -13,8 +13,16 @@ export async function getProductsByName(productName) {
 }
 
 export async function getProductById(productId) {
-    const getProductByIdQuery = `select * from products
-    where id = ?`
+    const getProductByIdQuery = `select id,
+    name,
+    price,
+    category_id as categoryId,
+    likes,
+    specs,
+    warranty,
+    description
+    from products
+    where id = ?;`
     const [result, fields] = await db.execute(getProductByIdQuery, [productId])
     return result[0]
 }
