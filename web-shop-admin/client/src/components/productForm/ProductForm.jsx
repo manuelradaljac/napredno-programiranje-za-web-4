@@ -9,7 +9,7 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
 
     function handleChange(e) {
         const { name, value } = e.target
-        const isNumericInput = name === 'price' || name === 'stock' || name === 'warranty' || name === 'category_id'
+        const isNumericInput = name === 'price' || name === 'stock' || name === 'warranty'
         if (isNumericInput) {
             setFormData(prev => ({
                 ...prev,
@@ -72,7 +72,6 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
                 <label htmlFor="stock">Stock:</label>
                 <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleChange} />
                 <label htmlFor="category">Category:</label>
-                {/* <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} /> */}
                 <select name="category" id="category" onChange={handleCategoryChange} value={formData.categoryId}>
                     {categories.map(category => {
                         let isSelected = false
