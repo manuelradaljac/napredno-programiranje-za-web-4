@@ -23,6 +23,14 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
         }))
     }
 
+    function handleCategoryChange(event) {
+        const categoryId = Number(event.target.value)
+                setFormData(prev => ({
+            ...prev,
+            categoryId: categoryId
+        }))
+    }
+
     async function handleSubmit(e) {
         e.preventDefault()
         setUpdateInProgress(true)
@@ -64,7 +72,15 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
                 <label htmlFor="stock">Stock:</label>
                 <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleChange} />
                 <label htmlFor="category">Category:</label>
-                <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} />
+                <select name="category" id="category" onChange={handleCategoryChange} value={formData.categoryId}>
+                    {categories.map(category => {
+                        let isSelected = false
+                        if (category.id === formData.categoryId) {
+                            isSelected = true
+                        }
+                        return <option value={category.id} key={category.id} selected={isSelected}>{category.name}</option>
+                    })}
+                </select>
                 <label htmlFor="specs">Specs:</label>
                 <textarea id="specs" name="specs" value={formData.specs} onChange={handleChange} />
                 <label htmlFor="warranty">Warranty:</label>
