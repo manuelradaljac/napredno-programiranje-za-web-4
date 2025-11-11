@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './ProductForm.module.css'
 
-const ProductForm = ({ formData, setFormData, productId, resetFormData }) => {
+const ProductForm = ({ formData, setFormData, productId, resetFormData, categories }) => {
 
     const [updateInProgress, setUpdateInProgress] = useState(false)
     const [formDataInvalid, setformDataInvalid] = useState(false)
@@ -21,6 +21,14 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData }) => {
             [name]: value
         }))
     }
+
+    function handleCategoryIdChange(event) {
+        const categoryId = Number(event.target.value); 
+        setFormData(prev => ({
+            ...prev,
+            category_id: categoryId
+        }))
+}
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -63,7 +71,17 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData }) => {
                 <label htmlFor="stock">Stock:</label>
                 <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleChange} />
                 <label htmlFor="category">Category:</label>
-                <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} />
+                {/* <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} /> */}
+                <select name="category" id="category" onChange={handleCategoryIdChange} value={formData.categoryId}>
+                    {categories.map((category) => {
+                        let isSelected = false;
+                        if(category.id === formData.category_id){
+                            isSelected = true
+                        }
+                        
+                        return <option key={category.id} value={category.id} selected={isSelected}>{category.name}</option> 
+                    })}
+                </select>
                 <label htmlFor="specs">Specs:</label>
                 <textarea id="specs" name="specs" value={formData.specs} onChange={handleChange} />
                 <label htmlFor="warranty">Warranty:</label>
