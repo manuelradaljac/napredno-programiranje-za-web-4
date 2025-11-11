@@ -13,15 +13,30 @@ export async function getProductsByName(productName) {
 }
 
 export async function getProductById(productId) {
-    const getProductByIdQuery = `select * from products
-    where id = ?`
+    const getProductByIdQuery = `select id,
+    name,
+    stock,
+    price,
+    category_id as categoryId,
+    likes,
+    specs,
+    warranty,
+    description
+    from products
+    where id = ?;`
     const [result, fields] = await db.execute(getProductByIdQuery, [productId])
     return result[0]
 }
 
 export async function updateProduct(product) {
     const updateProductQuery = `update products
-    set name = ?, price = ?, stock = ?, specs = ?, warranty = ?, description = ?
+    set name = ?,
+    price = ?,
+    stock = ?,
+    specs = ?,
+    warranty = ?,
+    description = ?,
+    category_id = ?
     where id = ?`
     const [results, fields] = await db.execute(updateProductQuery, [
         product.name,
@@ -30,6 +45,7 @@ export async function updateProduct(product) {
         product.specs,
         product.warranty.toString(),
         product.description,
+        product.categoryId,
         product.id.toString()
     ])
 }

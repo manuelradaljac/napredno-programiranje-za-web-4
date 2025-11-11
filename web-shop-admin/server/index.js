@@ -1,6 +1,7 @@
 import express from 'express'
 import mysql from 'mysql2/promise'
 import productRoutes from './routes/products.js';
+import productCategoriesRoutes from './routes/product-categories.js'
 import cors from 'cors'
 
 const app = express();
@@ -27,6 +28,8 @@ app.listen(PORT, () => {
 
 // Using routes
 app.use('/products', productRoutes);
+app.use('/categories', productCategoriesRoutes)
+
 
 
 

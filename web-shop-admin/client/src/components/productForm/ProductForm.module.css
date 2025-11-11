@@ -25,7 +25,8 @@
   }
   
   .product_form input,
-  .product_form textarea {
+  .product_form textarea,
+  .product_form select {
     width: 100%;
     padding: var(--10px) var(--14px);
     border: 1px solid #ccc;

@@ -7,6 +7,7 @@ import { addProduct, getCategories, getProductById, getProductsByName, updatePro
 const updateProductSchema = z.object({
   id: z.number().min(1),
   name: z.string().min(5),
+  categoryId: z.number().min(1),
   price: z.number().min(0),
   stock: z.number().min(0),
   specs: z.string().optional().default(''),

@@ -5,10 +5,11 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
 
     const [updateInProgress, setUpdateInProgress] = useState(false)
     const [formDataInvalid, setformDataInvalid] = useState(false)
+    console.log('categories values', formData)
 
     function handleChange(e) {
         const { name, value } = e.target
-        const isNumericInput = name === 'price' || name === 'stock' || name === 'warranty' || name === 'category_id'
+        const isNumericInput = name === 'price' || name === 'stock' || name === 'warranty'
         if (isNumericInput) {
             setFormData(prev => ({
                 ...prev,
@@ -21,14 +22,6 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
             [name]: value
         }))
     }
-
-    function handleCategoryIdChange(event) {
-        const categoryId = Number(event.target.value); 
-        setFormData(prev => ({
-            ...prev,
-            category_id: categoryId
-        }))
-}
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -71,17 +64,7 @@ const ProductForm = ({ formData, setFormData, productId, resetFormData, categori
                 <label htmlFor="stock">Stock:</label>
                 <input type="number" id="stock" name="stock" value={formData.stock} onChange={handleChange} />
                 <label htmlFor="category">Category:</label>
-                {/* <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} /> */}
-                <select name="category" id="category" onChange={handleCategoryIdChange} value={formData.categoryId}>
-                    {categories.map((category) => {
-                        let isSelected = false;
-                        if(category.id === formData.category_id){
-                            isSelected = true
-                        }
-                        
-                        return <option key={category.id} value={category.id} selected={isSelected}>{category.name}</option> 
-                    })}
-                </select>
+                <input type="number" id="category" name="category_id" value={formData.category_id} onChange={handleChange} />
                 <label htmlFor="specs">Specs:</label>
                 <textarea id="specs" name="specs" value={formData.specs} onChange={handleChange} />
                 <label htmlFor="warranty">Warranty:</label>
