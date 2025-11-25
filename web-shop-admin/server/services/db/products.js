@@ -57,7 +57,7 @@ export async function addProduct(product) {
         product.name,
         product.price,
         product.stock,
-        product.category_id,
+        product.categoryId,
         product.specs,
         product.warranty,
         product.description])

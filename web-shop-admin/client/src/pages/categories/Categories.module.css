@@ -1,0 +1,43 @@
+.container_div {
+
+}
+
+.search_div {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.search_products_input {
+    border-radius: 100px;
+    border-style: none;
+    background-color: rgb(244, 244, 244);
+    padding: 20px 34px;
+    color: rgb(80, 80, 80);
+    border-radius: 100px 0px 0px 100px;
+    width: 40%;
+    min-width: 300px;
+    font-size: 18px;
+}
+
+.search_products_input::placeholder {
+    color: rgb(157, 157, 157);
+}
+
+input:focus {
+    outline: none;
+}
+
+.search_img {
+    width: 20px;
+    height: 20px;
+}
+
+.search_btn {
+    border: none;
+    background-color: rgb(46, 95, 216);
+    padding: 15px 25px 15px 15px;
+    border-radius: 0px 40px 40px 0px;
+    margin-left: -10px;
+}

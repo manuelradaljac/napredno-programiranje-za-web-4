@@ -17,7 +17,6 @@ const updateProductSchema = z.object({
 
 const createProductSchema = updateProductSchema.extend({
   id: z.number().optional(),
-  category_id: z.number().min(1)
 })
 
 function returnErrorResponse(res) {
