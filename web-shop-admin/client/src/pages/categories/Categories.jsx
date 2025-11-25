@@ -8,19 +8,13 @@ const Categories = () => {
   const inputElementRef = useRef();
   const [searchTerm, setSearchTerm] = useState("");
   const { data, error, isPending } = useFetch(
-    `http://localhost:3000/categories?category_name=${searchTerm}`
+    `http://localhost:3000/categories`
   );
 
   function handleSearch() {
     const inputValue = inputElementRef.current.value;
     setSearchTerm(inputValue);
   }
-
-  const dummyCategories = [
-    { id: 1, name: "Fridges" },
-    { id: 2, name: "Smartphones" },
-    { id: 3, name: "Printers" },
-  ];
 
   return (
     <div>
@@ -41,7 +35,7 @@ const Categories = () => {
       {isPending && <p>Loading...</p>}
       {error && <p>error</p>}
       <Link to="/addNewCategory">Add new category</Link>
-      {dummyCategories && <CategoriesList categories={dummyCategories} />}
+      {data && <CategoriesList categories={data} />}
     </div>
   );
 };
